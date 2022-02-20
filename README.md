@@ -1,7 +1,7 @@
 # anejil
 
 ## Abstract
-anejil automatically activates a Python venv  with [pyvenv](https://github.com/jorgenschaefer/pyvenv) .
+anejil automatically activates a Python venv  with [pyvenv](https://github.com/jorgenschaefer/pyvenv).
 When you open a file in `python-mode`, it searches for the venv directory near the file, and activates it.
 
 ## Installation
