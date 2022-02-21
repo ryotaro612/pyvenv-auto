@@ -24,13 +24,12 @@
 ;;; Commentary:
 
 ;; anejil automatically activates a Python venv with pyvenv package.
-;; When you open a file in python-mode,
-;; it searches for the venv directory near the file, and activates it.
-;; When you open a Python file,
-;; anejil searches for a venv directory with a name in `anejil-venv-dirnames`.
-;; The search behavior is similar to that of `locate-dominating-file`.
-;; The directory name with a smaller index has higher priority
-;; than that with a greater index.
+;; When you open a file in python-mode, it searches for the venv
+;; directory near the file, and activates it.  When you open a Python
+;; file, anejil searches for a venv directory with a name in
+;; `anejil-venv-dirnames`.  The search behavior is similar to that of
+;; `locate-dominating-file`.  The directory name with a smaller index
+;; has higher priority than that with a greater index.
 
 ;;; Code:
 (require 'pyvenv)
@@ -48,8 +47,8 @@
 (defun anejil--locate-venv
     (base-directory venv-dirname)
   "Search for a venv directory.
-Search for a venv that matches `VENV-DIRNAME'
-from `BASE-DIRECTORY'.  The behavior is similar to
+Search for a venv that matches VENV-DIRNAME
+from BASE-DIRECTORY.  The behavior is similar to
 `locate-dominating-file'."
   (when-let ((parent-dir (locate-dominating-file
 			  base-directory
@@ -62,9 +61,9 @@ from `BASE-DIRECTORY'.  The behavior is similar to
 (defun anejil--locate-venvs
     (base-directory venv-dirnames)
   "Search for a venv directory from venv directories.
-Search for `VENV-DIRNAMES' from `BASE-DIRECTORY'.
+Search for VENV-DIRNAMES from BASE-DIRECTORY.
 The behavior is similar to `locate-dominating-file'.
-The priority is same as the order of `VENV-DIRNMAES'.
+The priority is same as the order of VENV-DIRNMAES.
 Return a path of the venv directory or nil."
   (seq-some #'identity
 	    (mapcar (lambda (venv-dirname)
@@ -83,7 +82,7 @@ Return a path of the venv directory or nil."
 		     venv-dir))))
 
 (defun anejil--resolve-activate (directory)
-  "Return the path of the activete file in `DIRECTORY'."
+  "Return the path of the activete file in DIRECTORY."
   (concat (file-name-as-directory
 	   (concat (file-name-as-directory directory) "bin"))
 	  "activate"))
