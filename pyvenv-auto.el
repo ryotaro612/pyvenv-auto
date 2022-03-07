@@ -1,4 +1,4 @@
-;;; anejil.el --- Automatically switch Python venvs -*- lexical-binding: t -*-
+;;; pyvenv-auto.el --- Automatically switch Python venvs -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2022 Nakamura, Ryotaro <nakamura.ryotaro.kzs@gmail.com>
 ;; Version: 1.0.0
@@ -23,28 +23,28 @@
 
 ;;; Commentary:
 
-;; anejil automatically activates a Python venv with pyvenv package.
+;; pyvenv-auto automatically activates a Python venv with pyvenv package.
 ;; When you open a file in python-mode, it searches for the venv
 ;; directory near the file, and activates it.  When you open a Python
-;; file, anejil searches for a venv directory with a name in
-;; `anejil-venv-dirnames`.  The search behavior is similar to that of
+;; file, pyvenv-auto searches for a venv directory with a name in
+;; `pyvenv-auto-venv-dirnames`.  The search behavior is similar to that of
 ;; `locate-dominating-file`.  The directory name with a smaller index
 ;; has higher priority than that with a greater index.
 
 ;;; Code:
 (require 'pyvenv)
 
-(defgroup anejil-mode nil
+(defgroup pyvenv-auto-mode nil
   "Autmatic switcher of Python venv."
-  :prefix "anejil-"
-  :group 'anejil)
+  :prefix "pyvenv-auto-"
+  :group 'pyvenv-auto)
 
-(defcustom anejil-venv-dirnames
+(defcustom pyvenv-auto-venv-dirnames
   (list "venv" ".venv")
   "The patterns of venv directories that you want to activate."
   :type '(repeat string))
 
-(defun anejil--locate-venv
+(defun pyvenv-auto--locate-venv
     (base-directory venv-dirname)
   "Search for a venv directory.
 Search for a venv that matches VENV-DIRNAME
@@ -52,13 +52,13 @@ from BASE-DIRECTORY.  The behavior is similar to
 `locate-dominating-file'."
   (when-let ((parent-dir (locate-dominating-file
 			  base-directory
-			  (anejil--resolve-activate
+			  (pyvenv-auto--resolve-activate
 			   venv-dirname))))
     (expand-file-name
          (concat (file-name-as-directory parent-dir)
 	    venv-dirname))))
 
-(defun anejil--locate-venvs
+(defun pyvenv-auto--locate-venvs
     (base-directory venv-dirnames)
   "Search for a venv directory from venv directories.
 Search for VENV-DIRNAMES from BASE-DIRECTORY.
@@ -67,36 +67,35 @@ The priority is same as the order of VENV-DIRNMAES.
 Return a path of the venv directory or nil."
   (seq-some #'identity
 	    (mapcar (lambda (venv-dirname)
-		      (anejil--locate-venv base-directory
+		      (pyvenv-auto--locate-venv base-directory
 					   venv-dirname))
 		    venv-dirnames)))
 
-(defun anejil--run ()
+(defun pyvenv-auto--run ()
   "Search for a venv directory and activate it."
-  (when-let* ((venv-dir (anejil--locate-venvs
+  (when-let* ((venv-dir (pyvenv-auto--locate-venvs
 			 default-directory
-			 anejil-venv-dirnames))
+			 pyvenv-auto-venv-dirnames))
 	      (match (not (equal venv-dir pyvenv-virtual-env))))
     (pyvenv-activate venv-dir)
-    (message (format "anejil activated %s."
-		     venv-dir))))
+    (message "pyvenv-auto activated %s." venv-dir)))
 
-(defun anejil--resolve-activate (directory)
+(defun pyvenv-auto--resolve-activate (directory)
   "Return the path of the activete file in DIRECTORY."
   (concat (file-name-as-directory
 	   (concat (file-name-as-directory directory) "bin"))
 	  "activate"))
 
 ;;;###autoload
-(define-minor-mode anejil-mode
-  "Turn on anejil-mode."
+(define-minor-mode pyvenv-auto-mode
+  "Turn on pyvenv-auto-mode."
   :init-value nil
-  :lighter " anejil"
+  :lighter " pyvenv-auto"
   :global t
   (let ((hook 'python-mode-hook))
-  (if anejil-mode
-      (add-hook hook #'anejil--run)
-    (remove-hook hook #'anejil--run))))
+  (if pyvenv-auto-mode
+      (add-hook hook #'pyvenv-auto--run)
+    (remove-hook hook #'pyvenv-auto--run))))
 
-(provide 'anejil)
-;;; anejil.el ends here
+(provide 'pyvenv-auto)
+;;; pyvenv-auto.el ends here
