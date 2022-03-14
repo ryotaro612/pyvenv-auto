@@ -5,7 +5,9 @@ pyvenv-auto automatically activates a Python venv  with [pyvenv](https://github.
 When you open a file in `python-mode`, it searches for the venv directory near the file, and activates it.
 
 ## Installation
-Put `pyvenv-auto.el` in a directory that `load-path` contains.
+You can install the package from Melpa:
+
+M-x package-install RET pyvenv-auto
 
 ## Usage
 You can enable pyvenv-auto as below.
