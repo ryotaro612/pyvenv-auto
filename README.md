@@ -13,7 +13,8 @@ M-x package-install RET pyvenv-auto
 You can enable pyvenv-auto as below.
 
 ```
-(pyvenv-auto-mode t)
+(use-package pyvenv-auto
+  :hook ((python-mode . pyvenv-auto-run)))
 ```
 
 When you open a Python file, pyvenv-auto searches for a venv directory with a name in `pyvenv-auto-venv-dirnames`.

@@ -1,7 +1,7 @@
 ;;; pyvenv-auto.el --- Automatically switch Python venvs -*- lexical-binding: t -*-
 
-;; Copyright (C) 2022 Nakamura, Ryotaro <nakamura.ryotaro.kzs@gmail.com>
-;; Version: 1.0.0
+;; Copyright (C) 2022-2023 Ryotaro Nakamura <nakamura.ryotaro.kzs@gmail.com>
+;; Version: 2.0.0
 ;; Package-Requires: ((emacs "26.3") (pyvenv "1.21"))
 ;; URL: https://github.com/nryotaro/pyvenv-auto
 ;; This file is not part of GNU Emacs.
@@ -71,7 +71,7 @@ Return a path of the venv directory or nil."
 					   venv-dirname))
 		    venv-dirnames)))
 
-(defun pyvenv-auto--run ()
+(defun pyvenv-auto-run ()
   "Search for a venv directory and activate it."
   (when-let* ((venv-dir (pyvenv-auto--locate-venvs
 			 default-directory
@@ -85,17 +85,6 @@ Return a path of the venv directory or nil."
   (concat (file-name-as-directory
 	   (concat (file-name-as-directory directory) "bin"))
 	  "activate"))
-
-;;;###autoload
-(define-minor-mode pyvenv-auto-mode
-  "Turn on pyvenv-auto-mode."
-  :init-value nil
-  :lighter " pyvenv-auto"
-  :global t
-  (let ((hook 'python-mode-hook))
-  (if pyvenv-auto-mode
-      (add-hook hook #'pyvenv-auto--run)
-    (remove-hook hook #'pyvenv-auto--run))))
 
 (provide 'pyvenv-auto)
 ;;; pyvenv-auto.el ends here
